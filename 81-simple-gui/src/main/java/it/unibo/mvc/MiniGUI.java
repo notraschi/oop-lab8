@@ -10,8 +10,8 @@ import java.util.Random;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 /**
  * This class is a simple application that writes a random number on a file.
@@ -41,7 +41,13 @@ public class MiniGUI {
         panel.add(write);
 
         canvas.add(panel, BorderLayout.CENTER);
-        frame.setContentPane(panel);
+
+        final JTextField result = new JTextField("Result");
+        result.setEditable(false);
+        result.setFocusable(false);
+        canvas.add(result, BorderLayout.NORTH);
+
+        frame.setContentPane(canvas);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         /*
