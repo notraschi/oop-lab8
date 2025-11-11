@@ -8,7 +8,6 @@ public class DrawNumberStandardOutputView implements DrawNumberView {
 
     @Override
     public void setController(DrawNumberController observer) {
-        throw new UnsupportedOperationException("this view is output only");
     }
 
     @Override

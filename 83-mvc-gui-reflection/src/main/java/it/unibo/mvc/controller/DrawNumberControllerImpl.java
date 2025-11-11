@@ -1,10 +1,10 @@
 package it.unibo.mvc.controller;
 
+import java.util.Objects;
+
 import it.unibo.mvc.api.DrawNumber;
 import it.unibo.mvc.api.DrawNumberController;
 import it.unibo.mvc.api.DrawNumberView;
-
-import java.util.Objects;
 
 /**
  * This class implements the game controller. It orchestrates the game, exposes methods to its observers
