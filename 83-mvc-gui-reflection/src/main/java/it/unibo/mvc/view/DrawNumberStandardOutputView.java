@@ -17,7 +17,7 @@ public class DrawNumberStandardOutputView implements DrawNumberView {
 
     @Override
     public void result(DrawResult res) {
-        System.out.println(res);
+        System.out.println(res.getDescription());
     }
     
 }
