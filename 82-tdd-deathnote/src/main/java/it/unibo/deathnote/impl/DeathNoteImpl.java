@@ -1,7 +1,7 @@
 package it.unibo.deathnote.impl;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 import it.unibo.deathnote.api.DeathNote;
 
@@ -10,16 +10,20 @@ import it.unibo.deathnote.api.DeathNote;
  */
 public class DeathNoteImpl implements DeathNote {
 
-    private final HashMap<String, DeathNoteEntry> pages;
+    private static final String DEFAULT_DETAILS = "";
+    private static final String DEFAULT_DEATH_CAUSE = "heart attack";
+    private static final long TIME_WINDOW_DEATH_CAUSE = 40;
+    private static final long TIME_WINDOW_DETAILS = 6040;
+
+    private final Map<String, DeathNoteEntry> pages;
+    // a string's default value is null
     private String latestName;
     private long nameWriteTime;
     private long causeWriteTime;
 
-    private static final long TIME_WINDOW_DEATH_CAUSE = 40;
-    private static final long TIME_WINDOW_DETAILS = 6040;
-    private static final String DEFAULT_DEATH_CAUSE = "heart attack";
-    private static final String DEFAULT_DETAILS = "";
-
+    /**
+     * 
+     */
     public DeathNoteImpl() {
         this.pages = new LinkedHashMap<>();
     }
@@ -29,10 +33,10 @@ public class DeathNoteImpl implements DeathNote {
      */
     @Override
     public String getRule(final int ruleNumber) {
-        if (ruleNumber < 1 || ruleNumber > DeathNote.RULES.size()) {
+        if (ruleNumber < 1 || ruleNumber > RULES.size()) {
             throw new IllegalArgumentException("this isn't a valid rule number");
         }
-        return DeathNote.RULES.get(ruleNumber +1);
+        return RULES.get(ruleNumber - 1);
     }
 
     /**
@@ -41,7 +45,7 @@ public class DeathNoteImpl implements DeathNote {
     @Override
     public void writeName(final String name) {
         if (name == null) {
-            throw new NullPointerException("name cannot be null");
+            throw new NullPointerException("name cannot be null"); // NOPMD this was requested by interface
         }
         latestName = name;
         nameWriteTime = System.currentTimeMillis();
@@ -59,6 +63,9 @@ public class DeathNoteImpl implements DeathNote {
         } else if (System.currentTimeMillis() - nameWriteTime < TIME_WINDOW_DEATH_CAUSE) {
             pages.get(latestName).setCause(cause);
             causeWriteTime = System.currentTimeMillis();
+            if (pages.get(latestName).isEntryFrozen()) {
+                latestName = null;
+            }
             return true;
         } else {
             return false;
@@ -74,11 +81,14 @@ public class DeathNoteImpl implements DeathNote {
             throw new IllegalStateException("null details or null name");
         } else if (System.currentTimeMillis() - causeWriteTime < TIME_WINDOW_DETAILS) {
             pages.get(latestName).setDetails(details);
+            if (pages.get(latestName).isEntryFrozen()) {
+                latestName = null;
+            }
             return true;
         } else {
+            latestName = null;
             return false;
         }
- 
     }
 
     /**
@@ -116,10 +126,14 @@ public class DeathNoteImpl implements DeathNote {
     private class DeathNoteEntry {
         private String cause;
         private String details;
+        private boolean canModifyCause;
+        private boolean canModifyDetails;
 
-        public DeathNoteEntry(String cause, String details) {
+        DeathNoteEntry(final String cause, final String details) {
             this.cause = cause;
             this.details = details;
+            this.canModifyCause = true;
+            this.canModifyDetails = true;
         }
 
         public String getCause() {
@@ -130,12 +144,25 @@ public class DeathNoteImpl implements DeathNote {
             return details;
         }
 
-        public void setCause(String cause) {
-            this.cause = cause;
+        public void setCause(final String cause) {
+            if (canModifyCause) {
+                this.canModifyCause = false;
+                this.cause = cause;
+            }
         }
 
-        public void setDetails(String details) {
-            this.details = details;
+        public void setDetails(final String details) {
+            if (canModifyDetails) {
+                this.canModifyDetails = false;
+                this.details = details;
+            }
+        }
+
+        /**
+         * @return {@code true} if the entry is still modifiable in one of its fields 
+         */
+        public boolean isEntryFrozen() {
+            return !canModifyCause && !canModifyDetails;
         }
     }
 }

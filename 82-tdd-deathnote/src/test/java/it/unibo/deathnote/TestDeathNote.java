@@ -15,7 +15,7 @@ import it.unibo.deathnote.impl.DeathNoteImpl;
 
 class TestDeathNote {
 
-    private static final int ZERO = 0;
+    private static final int NEGATIVE_NUMBER = -10;
     private static final long SLEEP_TIME_FOR_CAUSE_OF_DEATH = 100;
     private static final long SLEEP_TIME_FOR_DETAILS = 6100;
     private static final String VICTIM = "Harold";
@@ -25,7 +25,7 @@ class TestDeathNote {
     private static final String CUSTOM_CAUSE_OF_DEATH = "karting accident";
     private static final String CUSTOM_DETAILS = "ran too long";
 
-    DeathNote deathNote;
+    private DeathNote deathNote;
 
     @BeforeEach
     public void setup() {
@@ -33,15 +33,24 @@ class TestDeathNote {
     }
 
     @Test
-    public void testRuleNumbers() {
-        var exception = assertThrows(
+    void testRuleNumbersWrapper() {
+        for (int i = NEGATIVE_NUMBER; i < 1; i++) {
+            testRuleNumbers(i);
+        }
+        for (int i = 1; i < 10; i++) {
+            testRuleNumbers(i + DeathNote.RULES.size());
+        }
+    }
+
+    void testRuleNumbers(final int ruleNumber) {
+        final var exception = assertThrows(
             IllegalArgumentException.class, 
             new Executable() {
                 @Override
                 public void execute() throws Throwable {
-                    deathNote.getRule(ZERO);
+                    deathNote.getRule(ruleNumber);
                 }
-            }      
+            }
         );
         assertNotNull(exception.getMessage());
         assertFalse(exception.getMessage().isEmpty());
@@ -49,7 +58,7 @@ class TestDeathNote {
     }
 
     @Test
-    public void testRuleValidity() {
+    void testRuleValidity() {
         for (final String rule : DeathNote.RULES) {
             assertNotNull(rule);
             assertFalse(rule.isEmpty());
@@ -58,7 +67,7 @@ class TestDeathNote {
     }
 
     @Test
-    public void testNameWritten() {
+    void testNameWritten() {
         assertFalse(deathNote.isNameWritten(VICTIM));
         deathNote.writeName(VICTIM);
         assertTrue(deathNote.isNameWritten(VICTIM));
@@ -68,14 +77,14 @@ class TestDeathNote {
     }
 
     @Test
-    public void testCauseOfDeath() throws InterruptedException {
-        var exception = assertThrows(
+    void testCauseOfDeath() throws InterruptedException {
+        final var exception = assertThrows(
             IllegalStateException.class, 
             new Executable() {
                 @Override
                 public void execute() throws Throwable {
                     deathNote.writeDeathCause(DEFAULT_CAUSE_OF_DEATH);
-                }   
+                }
             }
         );
         assertNotNull(exception.getMessage());
@@ -91,16 +100,16 @@ class TestDeathNote {
         assertNotEquals(DEFAULT_CAUSE_OF_DEATH, deathNote.getDeathCause(VICTIM2));
         assertEquals(CUSTOM_CAUSE_OF_DEATH, deathNote.getDeathCause(VICTIM2));
     }
-        
+
     @Test
-    public void testDetails() throws InterruptedException {
-        var exception = assertThrows(
+    void testDetails() throws InterruptedException {
+        final var exception = assertThrows(
             IllegalStateException.class, 
             new Executable() {
                 @Override
                 public void execute() throws Throwable {
                     deathNote.writeDetails(CUSTOM_DETAILS);
-                }   
+                }
             }
         );
         assertNotNull(exception.getMessage());

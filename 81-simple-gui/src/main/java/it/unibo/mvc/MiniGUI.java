@@ -56,7 +56,9 @@ public class MiniGUI {
         write.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                result.setText(String.valueOf(randomGenerator.nextInt()));
+                final int randomNumber = randomGenerator.nextInt();
+                System.out.println(randomNumber); // NOPMD this is requested by the excercise
+                result.setText(String.valueOf(randomNumber));
             }
         });
     }
