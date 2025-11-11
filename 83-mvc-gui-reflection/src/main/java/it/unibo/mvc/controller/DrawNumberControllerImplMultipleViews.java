@@ -38,11 +38,7 @@ public class DrawNumberControllerImplMultipleViews implements DrawNumberControll
     public void addView(final DrawNumberView newView) {
         views.add(newView);
             
-        try {
-            newView.setController(this);
-        } catch (UnsupportedOperationException e) {
-        }
-        
+        newView.setController(this);
         newView.start();
     }
 }
