@@ -23,16 +23,22 @@ public class DeathNoteImpl implements DeathNote {
         this.pages = new LinkedHashMap<>();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public String getRule(int ruleNumber) {
+    public String getRule(final int ruleNumber) {
         if (ruleNumber < 1 || ruleNumber > DeathNote.RULES.size()) {
             throw new IllegalArgumentException("this isn't a valid rule number");
         }
         return DeathNote.RULES.get(ruleNumber +1);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void writeName(String name) {
+    public void writeName(final String name) {
         if (name == null) {
             throw new NullPointerException("name cannot be null");
         }
@@ -42,8 +48,11 @@ public class DeathNoteImpl implements DeathNote {
         pages.put(name, new String[] {DEFAULT_DEATH_CAUSE, ""});
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public boolean writeDeathCause(String cause) {
+    public boolean writeDeathCause(final String cause) {
         if (latestName == null || cause == null) {
             throw new IllegalStateException("null cause of death or null name");
         } else if (System.currentTimeMillis() - nameWriteTime < TIME_WINDOW_DEATH_CAUSE) {
@@ -55,8 +64,11 @@ public class DeathNoteImpl implements DeathNote {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public boolean writeDetails(String details) {
+    public boolean writeDetails(final String details) {
         if (latestName == null || details == null) {
             throw new IllegalStateException("null details or null name");
         } else if (System.currentTimeMillis() - causeWriteTime < TIME_WINDOW_DETAILS) {
@@ -68,8 +80,11 @@ public class DeathNoteImpl implements DeathNote {
  
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public String getDeathCause(String name) {
+    public String getDeathCause(final String name) {
         if (pages.containsKey(name)) {
             return pages.get(name)[0];
         } else {
@@ -77,8 +92,11 @@ public class DeathNoteImpl implements DeathNote {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public String getDeathDetails(String name) {
+    public String getDeathDetails(final String name) {
         if (pages.containsKey(name)) {
             return pages.get(name)[1];
         } else {
@@ -86,8 +104,11 @@ public class DeathNoteImpl implements DeathNote {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public boolean isNameWritten(String name) {
+    public boolean isNameWritten(final String name) {
         return pages.containsKey(name);
     }
 }
