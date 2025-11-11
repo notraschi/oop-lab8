@@ -10,7 +10,7 @@ import it.unibo.deathnote.api.DeathNote;
  */
 public class DeathNoteImpl implements DeathNote {
 
-    private final HashMap<String, String[]> pages;
+    private final HashMap<String, DeathNoteEntry> pages;
     private String latestName;
     private long nameWriteTime;
     private long causeWriteTime;
@@ -18,6 +18,7 @@ public class DeathNoteImpl implements DeathNote {
     private static final long TIME_WINDOW_DEATH_CAUSE = 40;
     private static final long TIME_WINDOW_DETAILS = 6040;
     private static final String DEFAULT_DEATH_CAUSE = "heart attack";
+    private static final String DEFAULT_DETAILS = "";
 
     public DeathNoteImpl() {
         this.pages = new LinkedHashMap<>();
@@ -45,7 +46,7 @@ public class DeathNoteImpl implements DeathNote {
         latestName = name;
         nameWriteTime = System.currentTimeMillis();
         causeWriteTime = nameWriteTime;
-        pages.put(name, new String[] {DEFAULT_DEATH_CAUSE, ""});
+        pages.put(name, new DeathNoteEntry(DEFAULT_DEATH_CAUSE, DEFAULT_DETAILS));
     }
 
     /**
@@ -56,7 +57,7 @@ public class DeathNoteImpl implements DeathNote {
         if (latestName == null || cause == null) {
             throw new IllegalStateException("null cause of death or null name");
         } else if (System.currentTimeMillis() - nameWriteTime < TIME_WINDOW_DEATH_CAUSE) {
-            pages.get(latestName)[0] = cause;
+            pages.get(latestName).setCause(cause);
             causeWriteTime = System.currentTimeMillis();
             return true;
         } else {
@@ -72,7 +73,7 @@ public class DeathNoteImpl implements DeathNote {
         if (latestName == null || details == null) {
             throw new IllegalStateException("null details or null name");
         } else if (System.currentTimeMillis() - causeWriteTime < TIME_WINDOW_DETAILS) {
-            pages.get(latestName)[1] = details;
+            pages.get(latestName).setDetails(details);
             return true;
         } else {
             return false;
@@ -86,7 +87,7 @@ public class DeathNoteImpl implements DeathNote {
     @Override
     public String getDeathCause(final String name) {
         if (pages.containsKey(name)) {
-            return pages.get(name)[0];
+            return pages.get(name).getCause();
         } else {
             throw new IllegalArgumentException("name provided isn't in the Death Note");
         }
@@ -98,7 +99,7 @@ public class DeathNoteImpl implements DeathNote {
     @Override
     public String getDeathDetails(final String name) {
         if (pages.containsKey(name)) {
-            return pages.get(name)[1];
+            return pages.get(name).getDetails();
         } else {
             throw new IllegalArgumentException("name provided isn't in the Death Note");
         }
@@ -110,5 +111,31 @@ public class DeathNoteImpl implements DeathNote {
     @Override
     public boolean isNameWritten(final String name) {
         return pages.containsKey(name);
+    }
+
+    private class DeathNoteEntry {
+        private String cause;
+        private String details;
+
+        public DeathNoteEntry(String cause, String details) {
+            this.cause = cause;
+            this.details = details;
+        }
+
+        public String getCause() {
+            return cause;
+        }
+
+        public String getDetails() {
+            return details;
+        }
+
+        public void setCause(String cause) {
+            this.cause = cause;
+        }
+
+        public void setDetails(String details) {
+            this.details = details;
+        }
     }
 }
