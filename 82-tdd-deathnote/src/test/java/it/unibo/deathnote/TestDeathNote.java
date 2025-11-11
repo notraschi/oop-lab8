@@ -114,6 +114,6 @@ class TestDeathNote {
 
         assertFalse(deathNote.writeDetails(EMPTY_STRING));
         assertNotEquals(EMPTY_STRING, deathNote.getDeathCause(VICTIM2));
-        assertEquals(CUSTOM_DETAILS, deathNote.getDeathCause(VICTIM2));
+        assertEquals(CUSTOM_DETAILS, deathNote.getDeathDetails(VICTIM2));
     }
 }
