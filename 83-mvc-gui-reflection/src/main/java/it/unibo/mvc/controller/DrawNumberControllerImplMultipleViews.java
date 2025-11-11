@@ -6,6 +6,7 @@ import java.util.Objects;
 import it.unibo.mvc.api.DrawNumber;
 import it.unibo.mvc.api.DrawNumberController;
 import it.unibo.mvc.api.DrawNumberView;
+import it.unibo.mvc.view.DrawNumberSwingView;
 
 public class DrawNumberControllerImplMultipleViews implements DrawNumberController {
 
@@ -37,8 +38,10 @@ public class DrawNumberControllerImplMultipleViews implements DrawNumberControll
     @Override
     public void addView(final DrawNumberView newView) {
         views.add(newView);
-            
-        newView.setController(this);
+        
+        if (newView.getClass().equals(DrawNumberSwingView.class)) {
+            newView.setController(this);
+        }
         newView.start();
     }
 }
