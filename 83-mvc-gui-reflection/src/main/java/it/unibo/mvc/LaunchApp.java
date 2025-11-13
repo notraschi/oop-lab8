@@ -27,7 +27,15 @@ public final class LaunchApp {
      * @throws IllegalAccessException in case of reflection issues
      * @throws IllegalArgumentException in case of reflection issues
      */
-    public static void main(final String... args) throws NoSuchMethodException {
+    public static void main(final String... args) 
+        throws
+        NoSuchMethodException,
+        IllegalAccessException,
+        InvocationTargetException,
+        ClassNotFoundException,
+        SecurityException,
+        InstantiationException
+        {
         final var model = new DrawNumberImpl();
         final DrawNumberController app = new DrawNumberControllerImplMultipleViews(model);
         /*
@@ -39,20 +47,12 @@ public final class LaunchApp {
             "it.unibo.mvc.view.DrawNumberSwingView",
             "it.unibo.mvc.view.DrawNumberStandardOutputView",
         };
-        try {
-            for (final String viewName : viewsToLoad) {
-                final Class<? extends DrawNumberView> view = Class.forName(viewName).asSubclass(DrawNumberView.class);
-                final Constructor<? extends DrawNumberView> constructor = view.getConstructor();
-                for (int i = 0; i < 3; i++) {
-                    app.addView(constructor.newInstance());
-                }
+        for (final String viewName : viewsToLoad) {
+            final Class<? extends DrawNumberView> view = Class.forName(viewName).asSubclass(DrawNumberView.class);
+            final Constructor<? extends DrawNumberView> constructor = view.getConstructor();
+            for (int i = 0; i < 3; i++) {
+                app.addView(constructor.newInstance());
             }
-        } catch (final IllegalAccessException
-            | InvocationTargetException 
-            | ClassNotFoundException
-            | SecurityException
-            | InstantiationException e) {
-            e.printStackTrace(); // NOPMD
         }
     }
 }
