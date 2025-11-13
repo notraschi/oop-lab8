@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.mvc.api.DrawNumber;
 import it.unibo.mvc.api.DrawNumberController;
 import it.unibo.mvc.api.DrawNumberView;
 import it.unibo.mvc.view.DrawNumberSwingView;
 
 /**
- * controllers that handles multiple views
+ * controllers that handles multiple views.
  */
 public class DrawNumberControllerImplMultipleViews implements DrawNumberController {
 
@@ -47,6 +48,7 @@ public class DrawNumberControllerImplMultipleViews implements DrawNumberControll
      * {@inheritDoc}
      */
     @Override
+    @SuppressFBWarnings(value = "DM_EXIT", justification = "this is intentional")
     public void quit() {
         System.exit(0);
     }

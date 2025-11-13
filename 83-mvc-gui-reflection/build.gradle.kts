@@ -15,3 +15,7 @@ application {
 tasks.javadoc {
     isFailOnError = false
 }
+
+dependencies {
+    compileOnly("com.github.spotbugs:spotbugs-annotations:4.7.3") 
+}

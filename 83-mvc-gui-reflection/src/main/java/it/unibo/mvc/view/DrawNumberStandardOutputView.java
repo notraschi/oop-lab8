@@ -5,7 +5,7 @@ import it.unibo.mvc.api.DrawNumberView;
 import it.unibo.mvc.api.DrawResult;
 
 /**
- * draws on stdout, does not handle input
+ * draws on stdout, does not handle input.
  */
 public class DrawNumberStandardOutputView implements DrawNumberView {
 
@@ -29,6 +29,8 @@ public class DrawNumberStandardOutputView implements DrawNumberView {
      */
     @Override
     public void result(final DrawResult res) {
-        System.out.println(res.getDescription());
+        // CHECKSTYLE: OFF
+        System.out.println(res.getDescription()); // NOPMD
+        // CHECKSTYLE: ON
     }
 }

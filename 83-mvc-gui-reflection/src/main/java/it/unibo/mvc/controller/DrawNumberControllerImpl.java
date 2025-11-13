@@ -2,6 +2,7 @@ package it.unibo.mvc.controller;
 
 import java.util.Objects;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.mvc.api.DrawNumber;
 import it.unibo.mvc.api.DrawNumberController;
 import it.unibo.mvc.api.DrawNumberView;
@@ -24,6 +25,11 @@ public final class DrawNumberControllerImpl implements DrawNumberController {
         this.model = model;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    // CHECKSTYLE: HiddenField OFF
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "this is a false positive")
     @Override
     public void addView(final DrawNumberView view) {
         Objects.requireNonNull(view, "Cannot set a null view");
@@ -34,17 +40,28 @@ public final class DrawNumberControllerImpl implements DrawNumberController {
         view.setController(this);
         view.start();
     }
+    // CHECKSTYLE: HiddenField ON
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void newAttempt(final int n) {
         Objects.requireNonNull(view, "There is no view attached!").result(model.attempt(n));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void resetGame() {
         this.model.reset();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressFBWarnings(value = "DM_EXIT", justification = "req")
     @Override
     public void quit() {
         /*

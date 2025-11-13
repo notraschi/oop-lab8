@@ -47,16 +47,12 @@ public final class LaunchApp {
                     app.addView(constructor.newInstance());
                 }
             }
-        } catch (final InstantiationException e) {
-            e.printStackTrace();
-        } catch (final IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (final InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (final ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (final SecurityException e) {
-            e.printStackTrace();
+        } catch (final IllegalAccessException
+            | InvocationTargetException 
+            | ClassNotFoundException
+            | SecurityException
+            | InstantiationException e) {
+            e.printStackTrace(); // NOPMD
         }
     }
 }
