@@ -33,9 +33,7 @@ public final class LaunchApp {
         IllegalAccessException,
         InvocationTargetException,
         ClassNotFoundException,
-        SecurityException,
-        InstantiationException
-        {
+        InstantiationException {
         final var model = new DrawNumberImpl();
         final DrawNumberController app = new DrawNumberControllerImplMultipleViews(model);
         /*
